@@ -1309,21 +1309,29 @@ var AppConfig = {
 };
 
 /*
-* 创建人：章剑飞
-* 创建原因：路由集
-* 创建时间：2016年05月18日14:41:33
-*
-* */
+ * 创建人：章剑飞
+ * 创建原因：路由集
+ * 创建时间：2016年05月18日14:41:33
+ *
+ * */
 var APP_ROUTER = {
   //获取路由集
-  getTables : function() {
+  getTables: function () {
     return [
       //首页路由
       MAIN_ROUTER,
       //日程路由
       SCHEDULE_ROUTER,
       //设置路由
-      ACCOUNT_ROUTER
+      ACCOUNT_ROUTER,
+      //装货确认
+      LOADINGS_ROUTER,
+      //客户签收
+      CUSTOMERS_ROUTER,
+      //退货管理
+      RETURNS_ROUTER,
+      //服务管理
+      SERVICES_ROUTER
     ];
   }
 };
@@ -1342,6 +1350,32 @@ var ACCOUNT_ROUTER = {
       'main_view': {
         templateUrl: 'business/account/index.html',
         controller: 'AccountCtrl'
+      }
+    }
+  }
+};
+
+var CUSTOMERS_ROUTER = {
+  //"客户签收"路由
+  customers_tab: {
+    url: '/customers_tab',
+    views: {
+      'main_view': {
+        templateUrl: 'business/customers/index.html',
+        controller: 'CustomersCtrl'
+      }
+    }
+  }
+};
+
+var LOADINGS_ROUTER = {
+  //"装货确认"路由
+  loadings_tab: {
+    url: '/loadings_tab',
+    views: {
+      'main_view': {
+        templateUrl: 'business/loadings/index.html',
+        controller: 'LoadingsCtrl'
       }
     }
   }
@@ -1371,6 +1405,19 @@ var MAIN_ROUTER = {
       'main_view': {
         templateUrl: 'business/main/views/msg_detail.html',
         controller: 'MsgDetailCtrl'
+      }
+    }
+  }
+};
+
+var RETURNS_ROUTER = {
+  //"退货管理"路由
+  returns_tab: {
+    url: '/returns_tab',
+    views: {
+      'main_view': {
+        templateUrl: 'business/returns/index.html',
+        controller: 'ReturnsCtrl'
       }
     }
   }
@@ -1416,6 +1463,19 @@ var SCHEDULE_ROUTER = {
   }
 };
 
+var SERVICES_ROUTER = {
+  //"服务管理"路由
+  services_tab: {
+    url: '/services_tab',
+    views: {
+      'main_view': {
+        templateUrl: 'business/services/index.html',
+        controller: 'ServicesCtrl'
+      }
+    }
+  }
+};
+
 
 /**
  * 创建人：章剑飞
@@ -1429,6 +1489,36 @@ new AppModule()
   .name("AccountCtrl")
   .params(["$scope"])
   .action(function($scope){
+
+    $scope.settings = {
+      enableFriends: true
+    };
+
+  })
+  .build();
+
+new AppModule()
+  .group('app.business.customers.controller')
+  .require([])
+  .type('controller')
+  .name('CustomersCtrl')
+  .params(['$scope'])
+  .action(function ($scope) {
+
+    $scope.settings = {
+      enableFriends: true
+    };
+
+  })
+  .build();
+
+new AppModule()
+  .group('app.business.loadings.controller')
+  .require([])
+  .type('controller')
+  .name('LoadingsCtrl')
+  .params(['$scope'])
+  .action(function ($scope) {
 
     $scope.settings = {
       enableFriends: true
@@ -1579,6 +1669,21 @@ new AppModule()
   })
   .build();
 
+new AppModule()
+  .group('app.business.returns.controller')
+  .require([])
+  .type('controller')
+  .name('ReturnsCtrl')
+  .params(['$scope'])
+  .action(function ($scope) {
+
+    $scope.settings = {
+      enableFriends: true
+    };
+
+  })
+  .build();
+
 
 /**
  * 创建人：章剑飞
@@ -1593,6 +1698,10 @@ new AppModule()
   .params(["$scope", "$state", "ScheduleAddService"])
   .action(function($scope, $state, ScheduleAddService){
 
+    ScheduleAddService.loadData(function(data){
+      $scope.scheduleList = data;
+    });
+
     $scope.datetodo ={
       dateTime : "",
       todo:'',
@@ -1600,6 +1709,7 @@ new AppModule()
     };
     //提交todo
     $scope.submit = function(){
+
       ScheduleAddService.save(function(data){
         $state.go('tab.schedule',{});
       },$scope.datetodo);
@@ -1640,7 +1750,7 @@ new AppModule()
       $scope.date = ScheduleService.getDate(year,month);
     };
 
-    //跳转详情
+    //跳转列表
     $scope.toDetail = function(){
 
       $state.go("scheduleAdd");
@@ -1688,6 +1798,28 @@ new AppModule()
   .action(function (AppHttpService, AppMessageService) {
     return {
       dateTime : "",
+      //初始化加载
+      loadData : function(onSuccess){
+        onSuccess([]);
+        return
+        AppHttpService.send({
+          type: 'GET',
+          url: "todo/saveSchedule",
+          params: {
+          },
+          onSuccess: function (data) {
+
+            if(data.msgCode == 0){
+
+              onSuccess(data.list);
+            } else {
+            }
+          },
+          onError: function () {
+          }
+        });
+      },
+      //保存
       save: function (callback, data) {
         console.log(data);
         var me = this;
@@ -1787,6 +1919,20 @@ new AppModule()
   })
   .build();
 
+new AppModule()
+  .group('app.business.services.controller')
+  .require([])
+  .type('controller')
+  .name('ServicesCtrl')
+  .params(['$scope'])
+  .action(function ($scope) {
+
+    $scope.settings = {
+      enableFriends: true
+    };
+
+  })
+  .build();
 
 new AppStarter()
   .name('starter')
@@ -1818,9 +1964,25 @@ new AppStarter()
     //个人中心
     'app.business.account.controller',
     //页签
-    'app.business.tab.controller'
+    'app.business.tab.controller',
+
+    //装货确认
+    'app.business.loadings.controller',
+    //客户签收
+    'app.business.customers.controller',
+    //退货管理
+    'app.business.returns.controller',
+    //服务管理
+    'app.business.services.controller'
   ])
-  .homePartners(['schedule_tab', 'account_tab'])
+  .homePartners([
+    'schedule_tab',
+    'account_tab',
+    'loadings_tab',
+    'customers_tab',
+    'returns_tab',
+    'services_tab'
+  ])
   .listeners({
 
     //跳转页面之前

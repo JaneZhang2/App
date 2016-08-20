@@ -1,14 +1,14 @@
 new AppModule()
-    .group('app.business.account.controller')
-    .require([])
-    .type('controller')
-    .name('AccountCtrl')
-    .params(['$scope'])
-    .action(function ($scope) {
+  .group('app.business.loadings.controller')
+  .require([])
+  .type('controller')
+  .name('LoadingsCtrl')
+  .params(['$scope'])
+  .action(function ($scope) {
 
-        $scope.settings = {
-            enableFriends: true
-        };
+    $scope.settings = {
+      enableFriends: true
+    };
 
-    })
-    .build();
+  })
+  .build();

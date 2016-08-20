@@ -1,4 +1,3 @@
-
 new AppStarter()
   .name('starter')
   .defaultUrl(['msg_tab'])
@@ -29,9 +28,25 @@ new AppStarter()
     //个人中心
     'app.business.account.controller',
     //页签
-    'app.business.tab.controller'
+    'app.business.tab.controller',
+
+    //装货确认
+    'app.business.loadings.controller',
+    //客户签收
+    'app.business.customers.controller',
+    //退货管理
+    'app.business.returns.controller',
+    //服务管理
+    'app.business.services.controller'
   ])
-  .homePartners(['schedule_tab', 'account_tab'])
+  .homePartners([
+    'schedule_tab',
+    'account_tab',
+    'loadings_tab',
+    'customers_tab',
+    'returns_tab',
+    'services_tab'
+  ])
   .listeners({
 
     //跳转页面之前

@@ -5,22 +5,22 @@
     <div class="list">
       <div class="item item-input">
         <span class="input-label">客户姓名</span>
-        <input type="text">
+        <input type="text" name="customername" ng-bind="form.customername">
       </div>
       <div class="item item-input">
         <span class="input-label">退订日期</span>
-        <input type="password">
+        <input type="text" name="ordertime" ng-bind="form.ordertime">
       </div>
       <div class="item item-input">
         <span class="input-label">退货单号</span>
-        <input type="password">
+        <input type="text" name="ikea_order_no" ng-bind="form.ikea_order_no">
       </div>
       <div class="row">
         <div class="col col-50">
-          <a class="button button-block button-positive">查找</a>
+          <a class="button button-block button-positive" ng-click="search()">查找</a>
         </div>
         <div class="col col-50">
-          <a class="button button-block button-outline button-positive">清空</a>
+          <a class="button button-block button-outline button-positive" ng-click="reset()">清空</a>
         </div>
       </div>
       <div class="item item-divider" style="padding: 0">
@@ -28,6 +28,13 @@
           <div class="col" style="width: 30%">订单号</div>
           <div class="col" style="width: 50%">客户名称</div>
           <div class="col" style="width: 20%">下单日期</div>
+        </div>
+      </div>
+      <div class="item" style="padding: 0" ng-repeat="item in items">
+        <div class="row">
+          <div class="col" style="width: 30%" ng-bind="item.owner_no"/>
+          <div class="col" style="width: 50%" ng-bind="item.receiver_name"/>
+          <div class="col" style="width: 20%" ng-bind="item.delivery_time_from"/>
         </div>
       </div>
     </div>

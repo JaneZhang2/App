@@ -13,12 +13,15 @@ var APP_ROUTER = {
       //日程路由
       SCHEDULE_ROUTER,
       //设置路由
-      ACCOUNT_ROUTER
+      ACCOUNT_ROUTER,
+      //装货确认
+      LOADINGS_ROUTER,
+      //客户签收
+      CUSTOMERS_ROUTER,
+      //退货管理
+      RETURNS_ROUTER,
+      //服务管理
+      SERVICES_ROUTER
     ];
   }
 };
-
-//Loadings
-//Customers
-//Returns
-//Services

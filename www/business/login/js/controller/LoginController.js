@@ -3,8 +3,8 @@ new AppModule()
   .require([])
   .type('controller')
   .name('LoginCtrl')
-  .params(['$scope', 'AppHttpService', 'AppCacheService'])
-  .action(function ($scope, AppHttpService, AppCacheService) {
+  .params(['$scope', 'AppHttpService', 'AppCacheService', '$state'])
+  .action(function ($scope, AppHttpService, AppCacheService, $state) {
 
     $scope.form = {};
 
@@ -23,7 +23,6 @@ new AppModule()
           switch (data.retcode) {
             case '0':
               alert('账号密码错误');
-              //window.location.href
               break;
             case '1':
               var sessionid = data.sessionid;
@@ -36,11 +35,13 @@ new AppModule()
                   sessionid: sessionid
                 },
                 onSuccess: function (data) {
-                  if (data.selectflag == '1') {
-                    AppCacheService.setStorageCache('applist', data);
-                  }
-                  else {
-                    //跳转
+                  switch (data.selectflag) {
+                    case '0':
+                      alert('获取菜单失败');
+                      break;
+                    case '1':
+                      AppCacheService.setStorageCache('modules', data);
+                      break;
                   }
                 }
               });

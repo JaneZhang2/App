@@ -1600,16 +1600,17 @@ new AppModule()
   .require([])
   .type('controller')
   .name('LoginCtrl')
-  .params(['$scope', 'AppHttpService', 'AppCacheService'])
-  .action(function ($scope, AppHttpService, AppCacheService) {
+  .params(['$scope', 'AppHttpService', 'AppCacheService', '$state'])
+  .action(function ($scope, AppHttpService, AppCacheService, $state) {
+
+    $state.go('customers_tab');
 
     $scope.form = {};
-
-    alert(AppCacheService);
 
     $scope.submit = function () {
       AppHttpService.send({
         url: 'login',
+        type: 'post',
         params: {
           username: $scope.form.username,
           password: $scope.form.password,
@@ -1620,8 +1621,24 @@ new AppModule()
         onSuccess: function (data) {
           switch (data.retcode) {
             case '0':
+              alert('账号密码错误');
               break;
             case '1':
+              var sessionid = data.sessionid;
+
+              AppCacheService.setStorageCache('sessionid', sessionid);
+
+              AppHttpService.send({
+                url: 'sral',
+                params: {
+                  sessionid: sessionid
+                },
+                onSuccess: function (data) {
+                  if (data.selectflag == '1') {
+                    AppCacheService.setStorageCache('applist', data);
+                  }
+                }
+              });
               break;
           }
         },

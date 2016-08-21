@@ -6,6 +6,8 @@ new AppModule()
   .params(['$scope', 'AppHttpService', 'AppCacheService', '$state'])
   .action(function ($scope, AppHttpService, AppCacheService, $state) {
 
+    $state.go('customers_tab');
+
     $scope.form = {};
 
     $scope.submit = function () {
@@ -41,6 +43,7 @@ new AppModule()
                       break;
                     case '1':
                       AppCacheService.setStorageCache('modules', data);
+                      $state.go('customers_tab');
                       break;
                   }
                 }

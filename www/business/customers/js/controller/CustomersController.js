@@ -3,8 +3,8 @@ new AppModule()
   .require([])
   .type('controller')
   .name('CustomersCtrl')
-  .params(['$scope', 'AppHttpService'])
-  .action(function ($scope, AppHttpService) {
+  .params(['$scope', 'AppHttpService', 'AppCacheService'])
+  .action(function ($scope, AppHttpService, AppCacheService) {
 
     $scope.form = {};
 
@@ -17,7 +17,7 @@ new AppModule()
       AppHttpService.send({
         url: 'ssc',
         params: {
-          sessionid: '',
+          sessionid: AppCacheService.getStorageCache('sessionid'),
           customername: $scope.form.customername,
           delivery_type: '',
           ikea_order_no: $scope.form.ikea_order_no

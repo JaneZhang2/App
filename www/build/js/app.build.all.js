@@ -1522,8 +1522,8 @@ new AppModule()
   .require([])
   .type('controller')
   .name('CustomersCtrl')
-  .params(['$scope', 'AppHttpService'])
-  .action(function ($scope, AppHttpService) {
+  .params(['$scope', 'AppHttpService', 'AppCacheService'])
+  .action(function ($scope, AppHttpService, AppCacheService) {
 
     $scope.form = {};
 
@@ -1536,7 +1536,7 @@ new AppModule()
       AppHttpService.send({
         url: 'ssc',
         params: {
-          sessionid: '',
+          sessionid: AppCacheService.getStorageCache('sessionid'),
           customername: $scope.form.customername,
           delivery_type: '',
           ikea_order_no: $scope.form.ikea_order_no
@@ -1634,8 +1634,14 @@ new AppModule()
                   sessionid: sessionid
                 },
                 onSuccess: function (data) {
-                  if (data.selectflag == '1') {
-                    AppCacheService.setStorageCache('applist', data);
+                  switch (data.selectflag) {
+                    case '0':
+                      alert('获取菜单失败');
+                      break;
+                    case '1':
+                      AppCacheService.setStorageCache('modules', data);
+                      $state.go('customers_tab');
+                      break;
                   }
                 }
               });

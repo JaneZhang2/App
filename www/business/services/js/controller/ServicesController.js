@@ -10,8 +10,9 @@ new AppModule()
 
     $scope.search = function () {
       AppHttpService.send({
-        url: 'sral',
+        url: 'select10cargoload',
         params: {
+          a: 'a',
           ikea_order_no: $scope.form.ikea_order_no
         },
         onSuccess: function (data) {

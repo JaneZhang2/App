@@ -6,7 +6,7 @@
 
 var AppConfig = {
   //请求服务器地址
-  SERVER_URL: 'http://127.0.0.1:48010/myscm/',
+  SERVER_URL: 'http://10.8.4.73:48090/myscm/',
   //请求公用参数
   DEFAULT_PARAMS: {
 

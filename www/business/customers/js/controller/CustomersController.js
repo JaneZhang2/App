@@ -9,19 +9,23 @@ new AppModule()
     $scope.form = {};
 
     $scope.search = function () {
-      AppHttpService.send({
+
+      if (!$scope.form.ikea_order_no) {
+        return alert("请扫描单号");
+      }
+
+      AppHttpService.send({//http://10.8.4.73:48090/myscm/select10cargoload?a=a
         url: 'ssc',
         params: {
+          sessionid: '',
           customername: $scope.form.customername,
           delivery_type: '',
-          ikea_order_no: $scope.form.ikea_order_no,
-          receiver_name: 'new',
-          receiver_tel: $scope.items.receiver_tel,
-          delivery_time_from: '',
-          sch_consign_datetime: ''
+          ikea_order_no: $scope.form.ikea_order_no
         },
         onSuccess: function (data) {
-          $scope.items = data.list;
+          if (data.selectflag == '1') {
+            $scope.items = data.list;
+          }
         },
         onError: function () {
 

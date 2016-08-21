@@ -5,11 +5,11 @@
     <div class="list">
       <div class="item item-input">
         <span class="input-label">客户名</span>
-        <input type="text" name="customername">
+        <input type="text" name="customername" ng-model="form.customername">
       </div>
       <div class="item item-input">
         <span class="input-label">订单号</span>
-        <input type="text" name="ikea_order_no">
+        <input type="text" name="ikea_order_no" ng-model="form.ikea_order_no">
       </div>
       <div class="row">
         <div class="col col-50">
@@ -24,6 +24,13 @@
           <div class="col" style="width: 20%">单号</div>
           <div class="col" style="width: 30%">地址</div>
           <div class="col" style="width: 50%">联系方式</div>
+        </div>
+      </div>
+      <div class="item item-divider" style="padding: 0" ng-repeat="item in items" onclick="alert('test')">
+        <div class="row">
+          <div class="col" style="width: 20%" ng-bind="item.owner_no"/>
+          <div class="col" style="width: 30%" ng-bind="item.receiver_address"/>
+          <div class="col" style="width: 50%" ng-bind="item.receiver_tel"/>
         </div>
       </div>
     </div>

@@ -1295,7 +1295,7 @@ new AppModule()
 
 var AppConfig = {
   //请求服务器地址
-  SERVER_URL: 'http://127.0.0.1:48010/myscm/',
+  SERVER_URL: 'http://10.8.4.73:48090/myscm/',
   //请求公用参数
   DEFAULT_PARAMS: {
 
@@ -1502,13 +1502,47 @@ new AppModule()
   .require([])
   .type('controller')
   .name('CustomersCtrl')
-  .params(['$scope'])
-  .action(function ($scope) {
+  .params(['$scope', 'AppHttpService'])
+  .action(function ($scope, AppHttpService) {
 
-    $scope.settings = {
-      enableFriends: true
+    $scope.form = {};
+
+    $scope.search = function () {
+
+      $scope.items = [
+        {
+          owner_no: '111',
+          receiver_address: '222',
+          receiver_tel: '000'
+        }
+      ];
+
+      if (!$scope.form.ikea_order_no) {
+        return alert("请扫描单号");
+      }
+
+      AppHttpService.send({//http://10.8.4.73:48090/myscm/select10cargoload?a=a
+        url: 'ssc',
+        params: {
+          sessionid: '',
+          customername: $scope.form.customername,
+          delivery_type: '',
+          ikea_order_no: $scope.form.ikea_order_no
+        },
+        onSuccess: function (data) {
+          if (data.selectflag == '1') {
+            $scope.items = data.list;
+          }
+        },
+        onError: function () {
+
+        }
+      });
     };
 
+    $scope.reset = function () {
+      $scope.form = {};
+    }
   })
   .build();
 
@@ -1517,13 +1551,35 @@ new AppModule()
   .require([])
   .type('controller')
   .name('LoadingsCtrl')
-  .params(['$scope'])
-  .action(function ($scope) {
+  .params(['$scope', 'AppHttpService'])
+  .action(function ($scope, AppHttpService) {
 
-    $scope.settings = {
-      enableFriends: true
+    $scope.form = {};
+
+    $scope.search = function () {
+      AppHttpService.send({
+        url: 'ssc',
+        params: {
+          customername: $scope.form.customername,
+          delivery_type: '',
+          ikea_order_no: $scope.form.ikea_order_no,
+          receiver_name: 'new',
+          receiver_tel: $scope.items.receiver_tel,
+          delivery_time_from: '',
+          sch_consign_datetime: ''
+        },
+        onSuccess: function (data) {
+          $scope.items = data.list;
+        },
+        onError: function () {
+
+        }
+      });
     };
 
+    $scope.reset = function () {
+      $scope.form = {};
+    }
   })
   .build();
 
@@ -1674,13 +1730,31 @@ new AppModule()
   .require([])
   .type('controller')
   .name('ReturnsCtrl')
-  .params(['$scope'])
-  .action(function ($scope) {
+  .params(['$scope', 'AppHttpService'])
+  .action(function ($scope, AppHttpService) {
 
-    $scope.settings = {
-      enableFriends: true
+    $scope.form = {};
+
+    $scope.search = function () {
+      AppHttpService.send({
+        url: 'sral',
+        params: {
+          customername: $scope.form.customername,
+          ordertime: $scope.form.ordertime,
+          ikea_order_no: $scope.form.ikea_order_no
+        },
+        onSuccess: function (data) {
+          $scope.items = data.list;
+        },
+        onError: function () {
+
+        }
+      });
     };
 
+    $scope.reset = function () {
+      $scope.form = {};
+    }
   })
   .build();
 
@@ -1929,15 +2003,11 @@ new AppModule()
 
     $scope.form = {};
 
-    // $scope.settings = {
-    //   enableFriends: true
-    // };
-
     $scope.search = function () {
-      alert('ppp');
       AppHttpService.send({
-        url: 'sral',
+        url: 'select10cargoload',
         params: {
+          a: 'a',
           ikea_order_no: $scope.form.ikea_order_no
         },
         onSuccess: function (data) {
@@ -1947,9 +2017,11 @@ new AppModule()
 
         }
       });
+    };
+
+    $scope.reset = function () {
+      $scope.form = {};
     }
-
-
   })
   .build();
 

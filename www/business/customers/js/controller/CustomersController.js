@@ -14,7 +14,7 @@ new AppModule()
         return alert("请扫描单号");
       }
 
-      AppHttpService.send({//http://10.8.4.73:48090/myscm/select10cargoload?a=a
+      AppHttpService.send({
         url: 'ssc',
         params: {
           sessionid: '',

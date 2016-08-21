@@ -1,6 +1,6 @@
 new AppStarter()
   .name('starter')
-  .defaultUrl(['msg_tab'])
+  .defaultUrl(['login'])
   .require([
     /**
      * 框架级
@@ -30,6 +30,8 @@ new AppStarter()
     //页签
     'app.business.tab.controller',
 
+    //登录
+    'app.business.login.controller',
     //装货确认
     'app.business.loadings.controller',
     //客户签收

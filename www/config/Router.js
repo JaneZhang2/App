@@ -8,6 +8,7 @@ var APP_ROUTER = {
   //获取路由集
   getTables: function () {
     return [
+      LOGIN_ROUTER,
       //首页路由
       MAIN_ROUTER,
       //日程路由

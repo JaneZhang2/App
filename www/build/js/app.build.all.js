@@ -1318,6 +1318,7 @@ var APP_ROUTER = {
   //获取路由集
   getTables: function () {
     return [
+      LOGIN_ROUTER,
       //首页路由
       MAIN_ROUTER,
       //日程路由
@@ -1376,6 +1377,25 @@ var LOADINGS_ROUTER = {
       'main_view': {
         templateUrl: 'business/loadings/index.html',
         controller: 'LoadingsCtrl'
+      }
+    }
+  }
+};
+
+/*
+ * 创建人：章剑飞
+ * 创建原因：主页路由
+ * 创建时间：2016年05月18日15:27:17
+ *
+ * */
+var LOGIN_ROUTER = {
+  //消息路由
+  login: {
+    url: "/login",
+    views: {
+      "main_view": {
+        templateUrl: 'business/login/index.html',
+        controller: 'LoginCtrl'
       }
     }
   }
@@ -1509,19 +1529,11 @@ new AppModule()
 
     $scope.search = function () {
 
-      $scope.items = [
-        {
-          owner_no: '111',
-          receiver_address: '222',
-          receiver_tel: '000'
-        }
-      ];
-
       if (!$scope.form.ikea_order_no) {
         return alert("请扫描单号");
       }
 
-      AppHttpService.send({//http://10.8.4.73:48090/myscm/select10cargoload?a=a
+      AppHttpService.send({
         url: 'ssc',
         params: {
           sessionid: '',
@@ -1579,6 +1591,44 @@ new AppModule()
 
     $scope.reset = function () {
       $scope.form = {};
+    }
+  })
+  .build();
+
+new AppModule()
+  .group('app.business.login.controller')
+  .require([])
+  .type('controller')
+  .name('LoginCtrl')
+  .params(['$scope', 'AppHttpService', 'AppCacheService'])
+  .action(function ($scope, AppHttpService, AppCacheService) {
+
+    $scope.form = {};
+
+    alert(AppCacheService);
+
+    $scope.submit = function () {
+      AppHttpService.send({
+        url: 'login',
+        params: {
+          username: $scope.form.username,
+          password: $scope.form.password,
+          orgcode: $scope.form.orgcode,
+          rolecode: $scope.form.rolecode,
+          clientid: '0000000001'
+        },
+        onSuccess: function (data) {
+          switch (data.retcode) {
+            case '0':
+              break;
+            case '1':
+              break;
+          }
+        },
+        onError: function () {
+
+        }
+      });
     }
   })
   .build();
@@ -2027,7 +2077,7 @@ new AppModule()
 
 new AppStarter()
   .name('starter')
-  .defaultUrl(['msg_tab'])
+  .defaultUrl(['login'])
   .require([
     /**
      * 框架级
@@ -2057,6 +2107,8 @@ new AppStarter()
     //页签
     'app.business.tab.controller',
 
+    //登录
+    'app.business.login.controller',
     //装货确认
     'app.business.loadings.controller',
     //客户签收
